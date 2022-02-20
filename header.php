@@ -121,11 +121,6 @@
                 <li><a href="members.php"><i class="icon-user"></i>Members</a></li>
 
               </ul>
-              <ul id="exampledropdownDropdown1" class="collapse list-unstyled ">
-
-                <li><a href="test.php"><i class="icon-user"></i>Test</a></li>
-
-              </ul>
 
 
             </li>
