@@ -18,11 +18,11 @@
 
     <!-- Bootstrap CSS-->
 
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"> -->
 
     <!-- Font Awesome CSS-->
 
-    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"> -->
 
     <!-- Fontastic Custom icon font-->
 
@@ -119,6 +119,12 @@
               <ul id="exampledropdownDropdown1" class="collapse list-unstyled ">
 
                 <li><a href="members.php"><i class="icon-user"></i>Members</a></li>
+
+              </ul>
+
+              <ul id="exampledropdownDropdown1" class="collapse list-unstyled ">
+
+                <li><a href="test.php"><i class="icon-user"></i>Test</a></li>
 
               </ul>
 
