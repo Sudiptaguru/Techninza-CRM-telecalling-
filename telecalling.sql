@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 20, 2022 at 02:47 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.4.4
+-- Generation Time: Feb 22, 2022 at 01:26 PM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -125,7 +126,7 @@ CREATE TABLE `contacts` (
   `contact_name` varchar(255) DEFAULT NULL,
   `contact_mobile` varchar(255) DEFAULT NULL,
   `contact_email` varchar(255) DEFAULT NULL,
-  `call_status` int(11) DEFAULT 1 COMMENT '1=picked, 2=not picked',
+  `call_status` int(11) DEFAULT '1' COMMENT '1=picked, 2=not picked',
   `assigned_member_id` varchar(255) DEFAULT NULL,
   `lead_status` varchar(255) DEFAULT NULL COMMENT '1=hot, 2=cold, 3=warm',
   `remarks` varchar(255) DEFAULT NULL,
@@ -137,7 +138,7 @@ CREATE TABLE `contacts` (
 --
 
 INSERT INTO `contacts` (`contact_id`, `contact_name`, `contact_mobile`, `contact_email`, `call_status`, `assigned_member_id`, `lead_status`, `remarks`, `called_date`) VALUES
-(2, 'fbgfcbg', '9153358390', 'ab@gmail.com', 2, '2', '2', '0', '2022-02-13 15:09:20'),
+(2, 'ab', '9153358390', 'ab@gmail.com', 2, '13', '2', '0', '2022-02-13 15:09:20'),
 (3, 'fbgfcbg', '9153358391', 'ab@gmail.com', 1, '2', '2', 'fgfg', '2022-02-13 15:09:42'),
 (6, 'fbgfcbg', '9153358390', 'ab@gmail.com', 1, '2', '2', 'cdvdvg', NULL),
 (7, 'fbgfcbg', '9153358390', 'ab@gmail.com', 1, '7', '2', 'edfedf', '2022-02-13 15:30:04');
@@ -171,15 +172,25 @@ INSERT INTO `country` (`id`, `country_name`) VALUES
 --
 
 CREATE TABLE `leads` (
-  `id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
   `leads_category` varchar(255) NOT NULL,
   `source` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `state` varchar(255) NOT NULL,
   `country` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
   `leads_type` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `leads`
+--
+
+INSERT INTO `leads` (`lead_id`, `leads_category`, `source`, `name`, `email`, `country`, `state`, `leads_type`) VALUES
+(1, 'b', 'as@gmail.com', 'admin', 'admin@gmail.com', '1', '2', 'hot'),
+(2, 'sdwsd', 'as@gmail.com', 'admin', 'admin1@gmail.com', '3', '11', 'hot'),
+(3, 'b', 'as@gmail.com', 'admin', 'admin@gmail.com', '2', '6', 'hot'),
+(4, 'b', 'as@gmail.com', 'admin', 'admin@gmail.com', '1', '1', 'hot');
 
 -- --------------------------------------------------------
 
@@ -190,7 +201,7 @@ CREATE TABLE `leads` (
 CREATE TABLE `leads_category` (
   `id` int(11) NOT NULL,
   `category_name` varchar(255) NOT NULL,
-  `status` int(2) NOT NULL DEFAULT 1
+  `status` int(2) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -198,7 +209,8 @@ CREATE TABLE `leads_category` (
 --
 
 INSERT INTO `leads_category` (`id`, `category_name`, `status`) VALUES
-(1, 'a', 0);
+(1, 'sdwsd', 0),
+(2, 'b', 1);
 
 -- --------------------------------------------------------
 
@@ -231,7 +243,7 @@ CREATE TABLE `members` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
-  `crm_access` int(11) NOT NULL DEFAULT 1
+  `crm_access` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -239,7 +251,7 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`id`, `name`, `email`, `phone`, `crm_access`) VALUES
-(2, 'abc', 'abc@gmail.com', '9114950910', 0),
+(2, 'abcd', 'abc@gmail.com', '9114950910', 0),
 (7, 'Aditya', 'admin@gmail.com', '9114950911', 1),
 (8, 'admin', 'admin@gmail.com', '9114950911', 0),
 (12, 'fr', 'fr@gmail.com', '9114950911', 0),
@@ -348,7 +360,7 @@ ALTER TABLE `country`
 -- Indexes for table `leads`
 --
 ALTER TABLE `leads`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`lead_id`);
 
 --
 -- Indexes for table `leads_category`
@@ -401,13 +413,13 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `lead_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `leads_category`
 --
 ALTER TABLE `leads_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `leads_remarks`
