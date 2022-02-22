@@ -37,7 +37,7 @@ include("auth.php"); //include auth.php file on all secure pages ?>
                     </div>
                 </div>
             </div>
-            <table id="example" class="display" style="width:100%">
+            <table id="example" class="display table table-bordered">
 
                 <!-- <p style="text-align:right">Search By Name</p> -->
 
