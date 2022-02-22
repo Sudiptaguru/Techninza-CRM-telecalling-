@@ -192,7 +192,7 @@ if(isset($_REQUEST['delete']))
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Member <b>Details</b></h2></div>
+                    <div class="col-sm-8"><h2>Leads <b>Details</b></h2></div>
                     <div class="col-sm-4">
                         <button href="#draggable" id="add_new" type="button" class="btn btn-info add-new" data-toggle="modal" title="ADD NEW"><i class="fa fa-plus"></i> Add New</button>
                     </div>
