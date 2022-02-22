@@ -1,5 +1,5 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"> -->
   <link rel="shortcut icon" type="image/png" href="/media/images/favicon.png">
   <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
   <link rel="stylesheet" type="text/css" href="/media/css/site-examples.css?_=9464ca0bf85c68c4b59f9bb203742676">
