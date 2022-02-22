@@ -1,15 +1,177 @@
 <?php
+namespace Phppot;
+
+// use Phppot\CountryState;
+require_once __DIR__ . '/Model/CountryStateCity.php';
+$countryStateCity = new CountryStateCity();
+$countryResult = $countryStateCity->getAllCountry();
+?>
+<?php
 
 // error_reporting(1);
 
 require('db.php');
 
 include("auth.php"); //include auth.php file on all secure pages ?>
-<?php include('header.php') ?>
-<?php include('headercdn.php') ?>
-<?php include('members_query.php') ?>
+<?php include('header.php'); ?>
+<?php include('headercdn.php'); ?>
+<?php 
+
+//Add Code
+
+if(isset($_REQUEST['submit']))
+
+{
+
+  // New Data Add
+
+  if($_REQUEST['lead_id']!=''){  
+
+    $leads_category=$_REQUEST['leads_category'];
+
+    $source=$_REQUEST['source'];
+
+    $name=$_REQUEST['name']; 
+
+    $email=$_REQUEST['email'];
+
+    $country=$_REQUEST['country'];
+
+    $state=$_REQUEST['state'];
+
+    $leads_type=$_REQUEST['leads_type'];
+
+    $lead_id=$_REQUEST['lead_id'];
+
+    // $conn=mysqli_connect('localhost','root','','register');
+
+    $sql = "UPDATE `leads` SET `leads_category`='".$leads_category."', `source`='".$source."', `name`='".$name."', `email`='".$email."', `country`='".$country."', `state`='".$state."', `leads_type`='".$leads_type."' WHERE `lead_id`='".$lead_id."'";
+
+    if($conn->query($sql)===TRUE)
+
+    {
+
+    $flg=0;
+
+    $msg= "Record updated successfully";
+
+    $redirectUrl=ADMIN_URL.'leads.php?msg='.$msg.'&flg='.$flg;
+
+    echo "<script type=\"text/javascript\">  window.location.href='$redirectUrl'; </script>";
+
+    }
+
+    else
+
+    {
+
+    $flg=1;
+
+    $msg= "Error" . $conn->error;
+
+    $redirectUrl=ADMIN_URL.'leads.php?msg='.$msg.'&flg='.$flg;
+
+    echo "<script type=\"text/javascript\">  window.location.href='$redirectUrl'; </script>";
+
+    }
+
+  }
+
+  //Add Data
+
+  else{
+
+    $leads_category=$_REQUEST['leads_category'];
+
+    $source=$_REQUEST['source'];
+
+    $name=$_REQUEST['name']; 
+
+    $email=$_REQUEST['email'];
+
+    $country=$_REQUEST['country'];
+
+    $state=$_REQUEST['state'];
+
+    $leads_type=$_REQUEST['leads_type'];
+
+    $sql = "INSERT INTO `leads`(`leads_category`,`source`,`name`,`email`,`country`,`state`,`leads_type`) VALUES ('".$leads_category."','".$source."','".$name."','".$email."','".$country."','".$state."','".$leads_type."')";
+
+    if($conn->query($sql)===TRUE)
+
+    {
+
+    $flg=0;
+
+    $msg= "New record created successfully";
+
+    $redirectUrl=ADMIN_URL.'leads.php?msg='.$msg.'&flg='.$flg;
+
+    echo "<script type=\"text/javascript\">  window.location.href='$redirectUrl'; </script>";
+
+    }
+
+    else
+
+    {
+
+    $flg=1;
+
+    $msg= "Error" . $conn->error;
+
+    $redirectUrl=ADMIN_URL.'leads.php?msg='.$msg.'&flg='.$flg;
+
+    echo "<script type=\"text/javascript\">  window.location.href='$redirectUrl'; </script>";
+
+    }
+
+  }
+
+} 
+
+//Delete Data
+
+if(isset($_REQUEST['delete']))
+
+{
+
+  $sql = "DELETE FROM `leads` WHERE `lead_id`='".$_REQUEST['delete']."'";
+
+  $result=$conn->query($sql);
+
+  if ($conn->query($sql) === TRUE)
+
+  {
+
+  $flg=0;
+
+  $msg= "Record deleted successfully";
+
+  $redirectUrl=ADMIN_URL.'leads.php?msg='.$msg.'&flg='.$flg;
+
+  echo "<script type=\"text/javascript\">  window.location.href='$redirectUrl'; </script>";
+
+  }
+
+  else 
+
+  {
+
+  $flg=1;
+
+  $msg= "Error deleting record: " . $conn->error;
+
+  $redirectUrl=ADMIN_URL.'leads.php?msg='.$msg.'&flg='.$flg;
+
+  echo "<script type=\"text/javascript\">  window.location.href='$redirectUrl'; </script>";
+
+  }
+
+} 
+
+?> 
 <link rel="stylesheet" type="text/css" href="css/header.css">
-<link rel="stylesheet" type="text/css" href="css/members.css">
+<!-- <link rel="stylesheet" type="text/css" href="css/members.css"> -->
 <script type="text/javascript" src="js/header.js"></script>
 
   <div class="row number-stats" >
@@ -36,7 +198,7 @@ include("auth.php"); //include auth.php file on all secure pages ?>
                     </div>
                 </div>
             </div>
-            <table id="example" class="display" style="width:100%">
+            <table id="example" class="display table table-bordered">
 
                 <!-- <p style="text-align:right">Search By Name</p> -->
 
@@ -54,9 +216,9 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                     <th>Email</th>
 
-                    <th>State</th>
-
                     <th>Country</th>
+
+                    <th>State</th>
 
                     <th>Leads Type</th>                    
 
@@ -76,7 +238,7 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
          //  $result3=$conn->query($sql3) ;
 
-          $id=1;
+          $lead_id=1;
 
          while ($row3=mysqli_fetch_array($sql,MYSQLI_ASSOC))
 
@@ -86,7 +248,7 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                    <tr >
 
-                    <td> <?php echo $id; ?></td>
+                    <td> <?php echo $lead_id; ?></td>
 
                     <td> <?php echo $row3['leads_category']; ?></td>
 
@@ -96,63 +258,19 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                     <td> <?php echo $row3['email']; ?></td>
 
+                    <td><?php echo $row3['country']; ?></td>
+
                     <td> <?php echo $row3['state']; ?></td>
 
-                    <td> <?php echo $row3['country']; ?></td>
+                    <td> <?php echo $row3['leads_type']; ?></td>                
 
-                    <td> <?php echo $row3['leads_type']; ?></td>
-
-                    <!-- <td><a onClick="if(confirm('Are you sure?')) return true; else return false;" href="active_deactive.php?id=
-
-                    <?php 
-
-                    // echo $row3['id'];
-
-                    ?>">
-
-
-
-                      <?php
-
-                      // if($row3['crm_access']==1)
-
-                      // {
-
-                      //  echo "Active";
-
-                      // }
-
-                      // else
-
-                      // {
-
-                      //  echo "Inactive";
-
-                      // }
-
-                      ?></a>
-
-                    </td>  --> 
-
-                    <td>
-
-                      <label class="switch">
-
-                        <input type="checkbox" id="<?=$row3['id']?>"  name="onoffswitch" value="<?=$row3['crm_access']?>" class="js-switch" <?=$row3['crm_access'] == '1' ? 'checked' : '' ;?>/>
-
-                        <span class="slider round"></span>
-
-                      </label>
-
-                    </td>                 
-
-                    <td> <a onClick="check('<?php echo $row3['id']; ?>')"  href="javascript:void(0);" ><i class="material-icons">&#xE254;</i> </a> | <a onClick="if(confirm('Are you sure to delete?')) return true; else return false;" href="?delete=<?php echo $row3['id'];  ?>"><i class="material-icons">&#xE872;</i> </a></td>                   
+                    <td> <a onClick="check('<?php echo $row3['lead_id']; ?>')"  href="javascript:void(0);" ><i class="material-icons">&#xE254;</i> </a> | <a onClick="if(confirm('Are you sure to delete?')) return true; else return false;" href="?delete=<?php echo $row3['lead_id'];  ?>"><i class="material-icons">&#xE872;</i> </a></td>                   
 
                   </tr>
 
                   <?php 
 
-          $id++; }
+          $lead_id++; }
 
           ?>
 
@@ -184,31 +302,32 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                         <div class="modal-body">
 
-                              <form name="myForm" action="" method="post" class="form-horizontal" onsubmit="return validateForm()">
+                              <form name="myForm" action="" method="post" class="form-horizontal">
 
                                 <div class="form-group">
 
                                   <label for="recipient-name" class="col-form-label">Leads Category:</label>
 
-                                  <select  name="assigned_member_id" id="assigned_member_id" class="form-control" >
+                                  <select  name="leads_category" id="leads_category" class="form-control">
 
                                     <option value="">None</option>
 
                                     <?php 
 
-                                    $sql7="select * from `members` ";
+                                    $sql7="select * from `leads_category` ";
 
                                     $result7=$conn->query($sql7) ;
 
                                     while($row7=mysqli_fetch_array($result7,MYSQLI_ASSOC)){
 
-                                      echo '<option value="'.$row7['id'].'" '; if($row3['contact_name']==$row7['id']) echo 'selected'; echo '>'.$row7['name'].'</option>';
+                                      echo '<option value="'.$row7['category_name'].'" '; if($row3['leads_category']==$row7['category_name']) echo 'selected'; echo '>'.$row7['category_name'].'</option>';
 
                                     }
 
                                     ?>
 
                                   </select>
+                                  <input type="hidden" name="lead_id" id="lead_id" class="form-control" placeholder="Enter lead_id" />
 
                                 </div>
 
@@ -216,7 +335,7 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                                   <label for="recipient-name" class="col-form-label">Source:</label>
 
-                                  <input type="text" name="email" id="email" class="form-control" placeholder="Enter Email"/>
+                                  <input type="text" name="source" id="source" class="form-control" placeholder="Enter Email"/>
 
                                 </div>
 
@@ -232,57 +351,38 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                                   <label for="recipient-name" class="col-form-label">Email:</label>
 
-                                  <input type="text" name="name" id="name" class="form-control" placeholder="Enter Email"/>
+                                  <input type="text" name="email" id="email" class="form-control" placeholder="Enter Email"/>
 
                                 </div>
 
                                 <div class="form-group">
 
-                                  <label for="recipient-name" class="col-form-label">State:</label>
+                                  <label for="country" class="col-form-label">Country:</label>
 
-                                  <select  name="assigned_member_id" id="assigned_member_id" class="form-control" >
+                                  <select name="country" id="country-list" class="form-control" onChange="getState(this.value);">
 
-                                    <option value="">None</option>
+                                    <option value disabled selected>Select Country</option>
 
-                                    <?php 
-
-                                    $sql7="select * from `members` ";
-
-                                    $result7=$conn->query($sql7) ;
-
-                                    while($row7=mysqli_fetch_array($result7,MYSQLI_ASSOC)){
-
-                                      echo '<option value="'.$row7['id'].'" '; if($row3['contact_name']==$row7['id']) echo 'selected'; echo '>'.$row7['name'].'</option>';
-
+                                    <?php
+                                    foreach ($countryResult as $country) {
+                                        ?>
+                                    <option value="<?php echo $country["id"]; ?>"><?php echo $country["country_name"]; ?></option>
+                                    <?php
                                     }
-
                                     ?>
 
                                   </select>
 
                                 </div>
 
+
                                 <div class="form-group">
 
-                                  <label for="recipient-name" class="col-form-label">Country:</label>
+                                  <label for="state" class="col-form-label">State:</label>
 
-                                  <select  name="assigned_member_id" id="assigned_member_id" class="form-control" >
+                                  <select  name="state" id="state-list" class="form-control" onChange="getCity(this.value);">
 
-                                    <option value="">None</option>
-
-                                    <?php 
-
-                                    $sql7="select * from `members` ";
-
-                                    $result7=$conn->query($sql7) ;
-
-                                    while($row7=mysqli_fetch_array($result7,MYSQLI_ASSOC)){
-
-                                      echo '<option value="'.$row7['id'].'" '; if($row3['contact_name']==$row7['id']) echo 'selected'; echo '>'.$row7['name'].'</option>';
-
-                                    }
-
-                                    ?>
+                                    <option value="">Select State</option>
 
                                   </select>
 
@@ -292,7 +392,7 @@ include("auth.php"); //include auth.php file on all secure pages ?>
 
                                   <label for="recipient-name" class="col-form-label">Leads Type:</label>
 
-                                  <select  name="assigned_member_id" id="assigned_member_id" class="form-control" >
+                                  <select  name="leads_type" id="leads_type" class="form-control">
 
                                     <option value="hot">hot</option>
                                     <option value="cold">cold</option>
@@ -355,23 +455,23 @@ $(document).ready( function() {
   setTimeout('$("#alert_msg").hide()',3000);
 });
 
-function check(id){
+function check(lead_id){
 
 
 
 try{
 
-    //alert(id);
+    //alert(lead_id);
 
     $.ajax({
 
             type : "POST",
 
-            url : "<?php echo ADMIN_URL; ?>ajax/members_ajax.php",
+            url : "<?php echo ADMIN_URL; ?>ajax/leads_ajax.php",
 
             dataType : "json", 
 
-            data : "id="+id,
+            data : "lead_id="+lead_id,
 
             success : function(data) {            
 
@@ -383,13 +483,21 @@ try{
 
                  $('#draggable').modal('show');                 
 
+                 $("#leads_category").val(data.leads_category);
+
+                 $("#source").val(data.source);
+
                  $("#name").val(data.name);
 
                  $("#email").val(data.email);
 
-                 $("#phone").val(data.phone);
+                 $("#country-list").val(data.country);
 
-                 $("#id").val(data.id);               
+                 $("#state-list").val(data.state);
+
+                 $("#leads_type").val(data.leads_type);
+
+                 $("#lead_id").val(data.lead_id);               
 
                 
 
@@ -456,36 +564,72 @@ function validateForm() {
   }
 
 }
+</script>
+<link href="./assets/css/style.css" rel="stylesheet" type="text/css" />
+<script src="./assets/js/ajax-handler.js" type="text/javascript"></script>
 
-$('input[name=onoffswitch]').click(function(){
+<!-- <script type="text/javascript">
+    
+    $(document).ready(function() {
+        let state_id ="<?=(!empty($client['state']))?$client['state']:''?>";        
+        let city_id ="<?=(!empty($client['city']))?$client['city']:''?>";
+        getState($('#countrySel option:selected').val());    
+        getCity($('#stateSel option:selected').val());
+        $(document).on('change','#countrySel',function() {
+          let countryId = $(this).val();
+          getState(countryId);
+        })
+          $(document).on('change','#stateSel',function() {
+          let stateId = $(this).val();
+          getCity(stateId);
+        })
 
-var id=$(this).attr('id');
 
-var crm_access = $(this).val();
+        function getState(countryId){
+        $.ajax({
+                type: "POST",
+                url:  "<?=base_url('admin/Index/getState')?>",
+                data: {countryId:countryId},
+                success:function(html) {
+                    $('#stateSel').html(html);
+                    if(state_id != ""){
+                        getCity(state_id);
 
-if(crm_access == 1) {
+                        $("#stateSel option").each(function(){
+                          if ($(this).val() == state_id){
+                            $(this).attr("selected","selected");
+                            }else{
+                            $(this).removeAttr("selected","selected");
 
-    crm_access = 0; 
+                            }
+                        });
+                    }
+                }
+          });
+    }
+    function getCity(stateId) {
+        $.ajax({
+                type: "POST",
+                url:  "<?=base_url('admin/Index/getCity')?>",
+                data: {stateId:stateId},
+                success:function(html) {
+                    $('#citySel').html(html);
+                    if(city_id != ""){
+                        $("#citySel option").each(function(){
+                          if ($(this).val() == city_id){
+                            $(this).attr("selected","selected");
+                            }else{
+                            $(this).removeAttr("selected","selected");
 
-} else {
-
-    crm_access = 1; 
-
-}
-
-//alert(id);
-
-$.ajax({
-
-        type:'POST',
-
-        url:'active_deactive.php',
-
-        data:'id= ' + id + '&crm_access='+crm_access
-
+                            }
+                        });
+                    }
+                }
+          });
+    }
     });
 
-});    
 
-</script>
+
+</script> -->
 <?php include "footer.php" ?>
