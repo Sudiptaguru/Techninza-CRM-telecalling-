@@ -192,7 +192,7 @@ if(isset($_REQUEST['delete']))
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Leads <b>Details</b></h2></div>
+                    <div class="col-sm-8"><h2>Member <b>Details</b></h2></div>
                     <div class="col-sm-4">
                         <button href="#draggable" id="add_new" type="button" class="btn btn-info add-new" data-toggle="modal" title="ADD NEW"><i class="fa fa-plus"></i> Add New</button>
                     </div>
@@ -302,11 +302,11 @@ if(isset($_REQUEST['delete']))
 
                         <div class="modal-body">
 
-                              <form name="myForm" action="" method="post" class="form-horizontal">
+                              <form name="myForm" id="signupForm" action="#" method="post" class="form-horizontal">
 
                                 <div class="form-group">
 
-                                  <label for="recipient-name" class="col-form-label">Leads Category:</label>
+                                  <label for="leads_category" class="col-form-label">Leads Category:</label>
 
                                   <select  name="leads_category" id="leads_category" class="form-control">
 
@@ -333,9 +333,9 @@ if(isset($_REQUEST['delete']))
 
                                 <div class="form-group">
 
-                                  <label for="recipient-name" class="col-form-label">Source:</label>
+                                  <label for="source" class="col-form-label">Source:</label>
 
-                                  <input type="text" name="source" id="source" class="form-control" placeholder="Enter Email"/>
+                                  <input type="text" name="source" id="source" class="form-control" placeholder="Enter Source"/>
 
                                 </div>
 
@@ -343,7 +343,7 @@ if(isset($_REQUEST['delete']))
 
                                   <label for="recipient-name" class="col-form-label">Name:</label>
 
-                                  <input type="text" name="name" id="name" class="form-control" placeholder="Enter Email"/>
+                                  <input type="text" name="name" id="name" class="form-control" placeholder="Enter Name"/>
 
                                 </div>
 
@@ -390,13 +390,25 @@ if(isset($_REQUEST['delete']))
 
                                 <div class="form-group">
 
-                                  <label for="recipient-name" class="col-form-label">Leads Type:</label>
+                                  <label for="leads_type" class="col-form-label">Leads Type:</label>
 
-                                  <select  name="leads_type" id="leads_type" class="form-control">
+                                  <select name="leads_type" id="leads_type" class="form-control">
 
-                                    <option value="hot">hot</option>
-                                    <option value="cold">cold</option>
-                                    <option value="warm">warm</option>
+                                    <option value="">None</option>
+
+                                    <?php 
+
+                                    $sql7="select * from `leads_remarks`";
+
+                                    $result7=$conn->query($sql7) ;
+
+                                    while($row7=mysqli_fetch_array($result7,MYSQLI_ASSOC)){
+
+                                      echo '<option value="'.$row7['remarks'].'" '; if($row3['leads_category']==$row7['remarks']) echo 'selected'; echo '>'.$row7['remarks'].'</option>';
+
+                                    }
+
+                                    ?>
 
                                   </select>
 
@@ -531,105 +543,40 @@ setInterval(function(){
 
 }
 
-function validateForm() {
-
-  let name = document.forms["myForm"]["name"].value;
-
-  if (name == "") {
-
-    alert("Name must be filled out");
-
-    return false;
-
-  }
-
-  let email = document.forms["myForm"]["email"].value;
-
-  if (email == "") {
-
-    alert("Email must be filled out");
-
-    return false;
-
-  }
-
-  let phone = document.forms["myForm"]["phone"].value;
-
-  if (phone == "") {
-
-    alert("Phone Number must be filled out");
-
-    return false;
-
-  }
-
-}
 </script>
 <link href="./assets/css/style.css" rel="stylesheet" type="text/css" />
 <script src="./assets/js/ajax-handler.js" type="text/javascript"></script>
-
-<!-- <script type="text/javascript">
-    
-    $(document).ready(function() {
-        let state_id ="<?=(!empty($client['state']))?$client['state']:''?>";        
-        let city_id ="<?=(!empty($client['city']))?$client['city']:''?>";
-        getState($('#countrySel option:selected').val());    
-        getCity($('#stateSel option:selected').val());
-        $(document).on('change','#countrySel',function() {
-          let countryId = $(this).val();
-          getState(countryId);
-        })
-          $(document).on('change','#stateSel',function() {
-          let stateId = $(this).val();
-          getCity(stateId);
-        })
-
-
-        function getState(countryId){
-        $.ajax({
-                type: "POST",
-                url:  "<?=base_url('admin/Index/getState')?>",
-                data: {countryId:countryId},
-                success:function(html) {
-                    $('#stateSel').html(html);
-                    if(state_id != ""){
-                        getCity(state_id);
-
-                        $("#stateSel option").each(function(){
-                          if ($(this).val() == state_id){
-                            $(this).attr("selected","selected");
-                            }else{
-                            $(this).removeAttr("selected","selected");
-
-                            }
-                        });
-                    }
-                }
-          });
-    }
-    function getCity(stateId) {
-        $.ajax({
-                type: "POST",
-                url:  "<?=base_url('admin/Index/getCity')?>",
-                data: {stateId:stateId},
-                success:function(html) {
-                    $('#citySel').html(html);
-                    if(city_id != ""){
-                        $("#citySel option").each(function(){
-                          if ($(this).val() == city_id){
-                            $(this).attr("selected","selected");
-                            }else{
-                            $(this).removeAttr("selected","selected");
-
-                            }
-                        });
-                    }
-                }
-          });
-    }
-    });
-
-
-
-</script> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script>
+$().ready(function(){
+ 
+$("#signupForm").validate({
+  // in 'rules' user have to specify all the constraints for respective fields
+rules : {
+leads_category : "required",
+source : "required",
+name : "required",
+country : "required",
+state : "required",
+leads_type : "required",
+email : {
+required : true,
+email : true
+},
+},
+    // in 'messages' user have to specify message as per rules
+messages : {
+leads_category : "Please enter your Leads Category",
+name : "Please enter your Name",
+source : "Please enter your Source",
+country : "Please enter your Country",
+state : "Please enter your State",
+leads_type : "Please enter Leads Type",
+}
+});
+});
+ 
+</script>
 <?php include "footer.php" ?>
